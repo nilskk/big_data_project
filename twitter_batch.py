@@ -1,11 +1,12 @@
 import json
 import tweepy
 from tweet_preprocessing import Tweet_Preprocessor
+import config as conf
 
-CONSUMER_KEY = "fS352dZ2fZ5W09JgJ8zd9HKdU"
-CONSUMER_SECRET = "NEcnCZP8LqG20SX53bIle5qPGQB8yMOf7Qj5KHoxMoJGwDJGXL"
-ACCESS_TOKEN = "2740635069-c1cCHowhszDsXZoDYN7cPKoKmPStWt9wJ6nqv2r"
-ACCESS_TOKEN_SECRET = "CFG7cJc2mkHN9MCeIwXSzcFeQUF2UiZlk9KRxRGtDK9ty"
+CONSUMER_KEY = conf.consumer_key
+CONSUMER_SECRET = conf.consumer_secret
+ACCESS_TOKEN = conf.access_token
+ACCESS_TOKEN_SECRET = conf.access_token_secret
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
