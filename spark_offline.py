@@ -5,7 +5,6 @@ from pyspark.sql.types import StructType, StructField, TimestampType, StringType
 import os
 
 os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.4 ' \
-                                    '--jars elasticsearch-hadoop-7.4.0/dist/elasticsearch-spark-20_2.11-7.4.0.jar ' \
                                     'pyspark-shell'
 
 spark = SparkSession.builder.appName("TwitterSpark").getOrCreate()
@@ -40,13 +39,5 @@ windowed_batch_df = windowed_batch_df.select(windowed_batch_df.window.start.alia
                         .withColumn("start", date_format(col("start").cast(TimestampType()), "yyyy/MM/dd HH:mm:ss"))\
                         .withColumn("end", date_format(col("end").cast(TimestampType()), "yyyy/MM/dd HH:mm:ss"))\
                         .sort("start", ascending=True)
-
-# query = windowed_df.writeStream.format("es")\
-#                                 .option("es.nodes", "localhost")\
-#                                 .option("es.port", "9200")\
-#                                 .option("es.resource", "es_spark_tweet")\
-#                                 .option("checkpointLocation", "es_spark_checkpoint/tweet")\
-#                                 .outputMode("append")\
-#                                 .start().awaitTermination()
 
 batch_query = windowed_batch_df.show(50)
