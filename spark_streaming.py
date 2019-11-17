@@ -25,9 +25,9 @@ windowed_batch_df = batch_df.withWatermark("timestamp", "10 seconds")\
                     .agg(avg("sentiment").alias("avg_sentiment"),
                          max("sentiment").alias("max_sentiment"),
                          min("sentiment").alias("min_sentiment"),
-                         count(when(batch_df["sentiment"]>0.2, True)).alias("pos_tweet_count"),
-                         count(when((batch_df["sentiment"]<=0.2) & (batch_df["sentiment"]>=-0.2), True)).alias("neutral_tweet_count"),
-                         count(when(batch_df["sentiment"]<-0.2, True)).alias("neg_tweet_count"))
+                         count(when(batch_df["sentiment"]>0.1, True)).alias("pos_tweet_count"),
+                         count(when((batch_df["sentiment"]<=0.1) & (batch_df["sentiment"]>=-0.1), True)).alias("neutral_tweet_count"),
+                         count(when(batch_df["sentiment"]<-0.1, True)).alias("neg_tweet_count"))
 
 windowed_batch_df = windowed_batch_df.select(windowed_batch_df.window.start.alias("start"),
                                              "avg_sentiment",
@@ -71,10 +71,10 @@ windowed_stream_df = stream_df.withWatermark("timestamp", "10 seconds") \
     .agg(avg("sentiment").alias("avg_sentiment"),
          max("sentiment").alias("max_sentiment"),
          min("sentiment").alias("min_sentiment"),
-         count(when(stream_df["sentiment"] > 0.2, True)).alias("pos_tweet_count"),
-         count(when((stream_df["sentiment"] <= 0.2) & (stream_df["sentiment"] >= -0.2), True)).alias(
+         count(when(stream_df["sentiment"] > 0.1, True)).alias("pos_tweet_count"),
+         count(when((stream_df["sentiment"] <= 0.1) & (stream_df["sentiment"] >= -0.1), True)).alias(
              "neutral_tweet_count"),
-         count(when(stream_df["sentiment"] < -0.2, True)).alias("neg_tweet_count"))
+         count(when(stream_df["sentiment"] < -0.1, True)).alias("neg_tweet_count"))
 
 windowed_stream_df = windowed_stream_df.select(windowed_stream_df.window.start.alias("start"),
                                                "avg_sentiment",
@@ -85,7 +85,7 @@ windowed_stream_df = windowed_stream_df.select(windowed_stream_df.window.start.a
                                                "neg_tweet_count") \
     .withColumn("start_int", col("start").cast(IntegerType())) \
     .withColumn("start", date_format(col("start").cast(TimestampType()), "yyyy/MM/dd HH:mm:ss"))\
-    .sort("start", ascending=True)
+    .sort("start", ascending=False)
 
 featAssembler = VectorAssembler(inputCols=["avg_sentiment", "max_sentiment", "min_sentiment"], outputCol="features")
 windowed_stream_df = featAssembler.transform(windowed_stream_df)
@@ -106,6 +106,7 @@ windowed_stream_df = windowed_stream_df.withColumn("pos_tweet_error", col("pos_t
 query = windowed_stream_df.writeStream\
                             .format("console")\
                             .outputMode("complete")\
+                            .option("truncate", False)\
                             .start().awaitTermination()
 
 
