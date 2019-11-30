@@ -12,9 +12,9 @@
 - Run `spark_streaming.py` to start analyzing the Stream data with Spark Structured Streaming. 
 4. Predict and compare Real Time Data with Historic Data
 - Run `twitter_streaming.py` to start the Twitter Stream
-- Run `compare_and_predict_online_with_offline.py` to first train LinearRegression Models and calculate an Average of the specific Metrics on the Historic Data and then predict the metrics on the Realtime Data with the Models and compare the metrics of the Realtime Data with the Average of the metrics from the Historic Data.
-So the comparison of real time and historic data is shown in the columns: `pos_tweet_count_diff`, `neg_tweet_count_diff` and `neutral_tweet_count_diff`
-The Prediction is shown in the columns: `pos_tweet_count_pred`, `neg_tweet_count_pred` and `neutral_tweet_count_pred`
+- Run `compare_and_predict_online_with_offline.py` to first train LinearRegression Models and calculate an Average of the specific Metrics on the Historic Data and then predict the metrics on the Realtime Data with the Models and compare the metrics of the Realtime Data with the Average of the metrics from the Historic Data.  
+So the comparison of real time and historic data is shown in the columns: `pos_tweet_count_diff`, `neg_tweet_count_diff` and `neutral_tweet_count_diff`.   
+The Prediction is shown in the columns: `pos_tweet_count_pred`, `neg_tweet_count_pred` and `neutral_tweet_count_pred`  
 
 ## Used Software/Libraries
 - Python 3.7.4
