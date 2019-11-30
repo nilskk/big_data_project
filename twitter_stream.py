@@ -11,6 +11,7 @@ ACCESS_TOKEN_SECRET = conf.access_token_secret
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
+# initialize kafka producer on port 9092
 producer = KafkaProducer(bootstrap_servers=["localhost:9092"],
                          value_serializer=lambda x: json.dumps(x).encode('utf-8'))
 
@@ -34,6 +35,7 @@ class MyStreamListener(tweepy.StreamListener):
                           "text": clean_tweet,
                           "sentiment": sentiment}
 
+            # send dict with KafkaProducer in topic "tweet"
             producer.send("tweet", value=tweet_dict)
 
     def on_error(self, status_code):
