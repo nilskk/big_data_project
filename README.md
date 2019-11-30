@@ -4,15 +4,15 @@
 - Start Zookeeper on Port 2081 (Standard) 
 - Start Kafka on Port 9092 (Standard) 
 - Create a Topic "tweet"
-2. Collect Historic Data
-- Run `twitter_batch.py` to collect preprocessed Twitter Data with Sentiment Scores
-3. Use Spark for Analysis
+2. Collect and analyze Historic Data
+- Run `twitter_batch.py` to collect preprocessed Twitter Data with Sentiment Scores as Json File
+- Run `spark_offline.py` to analyze the offline data with Spark Structured Streaming
+3. Stream and analyze Real Time Data
 - Run `twitter_streaming.py`to start the Twitter Stream, which is send to a `KafkaProducer`
-- Run `spark_streaming.py` to start Spark. It first analyzes the historic data 
-and trains a `LinearRegression` Model on the metrics. 
-Than the Real-Time Data, which is send from the `KafkaProducer` is analyzed 
-and predictions for metrics are made, based on the Regression Model.
-The results are printed on the console.
+- Run `spark_streaming.py` to start analyzing the Stream data with Spark Structured Streaming. 
+4. Predict and compare Real Time Data with Historic Data
+- Run `twitter_streaming.py` to start the Twitter Stream
+- Run `compare_and_predict_online_with_offline.py` to first train LinearRegression Models and calculate an Average of the specific Metrics on the Historic Data and then predict the metrics on the Realtime Data with the Models and compare the metrics of the Realtime Data with the Average of the metrics from the Historic Data
 
 ## Used Software/Libraries
 - Python 3.7.4
