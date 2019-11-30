@@ -65,6 +65,17 @@ def analyze_stream_data(lrModelList = None, batch_summary_df: DataFrame = None):
         windowed_stream_df = windowed_stream_df.alias("stream").join(batch_summary_df.alias("batch"),
                                                      col("stream.tmp1") == col("batch.summary"), "inner")
 
+        windowed_stream_df = windowed_stream_df\
+                                .withColumn("pos_tweet_count_diff", "pos_tweet_count_stream" - "pos_tweet_count_batch")\
+                                .withColumn("neutral_tweet_count_diff", "neutral_tweet_count_stream" - "neutral_tweet_count_batch") \
+                                .withColumn("neg_tweet_count_diff", "neg_tweet_count_stream" - "neg_tweet_count_batch")
+
+        windowed_stream_df = windowed_stream_df.select("start", "min_sentiment", "avg_sentiment", "max_sentiment",
+                                                       "pos_tweet_count_batch", "pos_tweet_count_stream", "pos_tweet_count_diff", "pos_tweet_count_pred",
+                                                       "neutral_tweet_count_batch", "neutral_tweet_count_stream", "neutral_tweet_count_diff", "neutral_tweet_count_pred",
+                                                       "neg_tweet_count_batch", "neg_tweet_count_stream", "neg_tweet_count_diff", "neg_tweet_count_pred")
+
+
 
     query = windowed_stream_df.writeStream\
                             .format("console")\
